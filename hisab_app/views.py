@@ -32,19 +32,6 @@ def person_list_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'POST'])
-def hisab_list_create(request):
-    if request.method == 'GET':
-        hisabs = Hisab.objects.all()
-        serializer = HisabSerializer(hisabs, many=True)
-        return Response(serializer.data)
-    
-    elif request.method == 'POST':
-        serializer = HisabSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def person_hisabs(request, pk):
@@ -79,15 +66,31 @@ def person_detail(request, pk):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['DELETE'])
-def delete_person(request, pk):
-    try:
-        person = get_object_or_404(Person, pk=pk)
-        person.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+# @api_view(['DELETE'])
+# def delete_person(request, pk):
+#     try:
+#         person = get_object_or_404(Person, pk=pk)
+#         person.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+#     except Exception as e:
+#         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+@api_view(['GET', 'POST'])
+def hisab_list_create(request):
+    if request.method == 'GET':
+        hisabs = Hisab.objects.all()
+        serializer = HisabSerializer(hisabs, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = HisabSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
 @api_view(['GET', 'PUT', 'DELETE'])
 def hisab_detail(request, pk):
     try:
